@@ -12,7 +12,7 @@ export class User {
   @Column({ length: 32 })
   password: string;
 
-  @Column()
+  @Column({default: 'user'})
   role: string;
 
   @OneToMany(() => Rental, rental => rental.user)
