@@ -9,7 +9,7 @@ export class Scooter {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: 'available' })
   status: string;
 
   @OneToMany(() => Rental, rental => rental.scooter)
