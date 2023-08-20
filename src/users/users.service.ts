@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from "bcrypt";
 import { User } from './user.entity';
 
 @Injectable()
@@ -31,9 +32,14 @@ export class UsersService {
     if (!user) {
       return null;
     }
+    if (attrs.password) {
+      const saltOrRounds = 12;
+      const hashedPassword = await bcrypt.hash(attrs.password, saltOrRounds);
+      attrs.password = hashedPassword;
+    }
     Object.assign(user, attrs);
     await this.repo.save(user);
-    
+
     return user;
   }
 }

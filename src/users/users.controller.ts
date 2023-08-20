@@ -29,11 +29,6 @@ export class UsersController {
     session.userId = null;
   }
 
-  @Get('/currentuser')
-  async currentUser() {
-    return 'currentuser';
-  }
-
   @Get('/:id')
   async getUser() {
     return 'getUser';

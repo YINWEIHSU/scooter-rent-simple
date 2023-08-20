@@ -55,11 +55,12 @@ describe('UsersService', () => {
   });
 
   it('should update a user', async () => {
-    const updatedUser = { id: 1, email: 'newemail@example.com' };
+    const updatedUser = { id: 1, email: 'newemail@example.com', password: 'password' };
     fakeRepository.findOne.mockResolvedValue(updatedUser);
     fakeRepository.save.mockResolvedValue(true);
 
-    const user = await service.update(1, { email: 'newemail@example.com' });
+    const user = await service.update(1, { email: 'newemail@example.com', password: 'newpassword' });
     expect(user).toEqual(updatedUser);
+    expect(user.password).not.toEqual('newpassword');
   });
 });
