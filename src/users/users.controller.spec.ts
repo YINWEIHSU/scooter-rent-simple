@@ -43,6 +43,7 @@ describe('UsersController', () => {
     const dto: createUserDto = {
       email: 'test01@example.com',
       password: '12345678',
+      role: 'user'
     };
     fakeAuthService.signup.mockResolvedValueOnce({ id: 1 });
 
@@ -57,6 +58,7 @@ describe('UsersController', () => {
     const dto: createUserDto = {
       email: 'test01@example.com',
       password: '12345678',
+      role: 'user'
     };
     fakeAuthService.signin.mockResolvedValueOnce({ id: 1 });
 

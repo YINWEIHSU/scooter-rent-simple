@@ -8,8 +8,8 @@ import { User } from './user.entity';
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User> ) {}
 
-  async create(email: string, password: string) {
-    const user = this.repo.create({ email, password });
+  async create(email: string, password: string, role: string) {
+    const user = this.repo.create({ email, password, role });
     await this.repo.save(user);
     return user;
   }
@@ -25,6 +25,11 @@ export class UsersService {
   async findOneByEmail(email: string) {
     const user = await this.repo.findOne({where:{ email }});
     return user;
+  }
+
+  async findAll() {
+    const users = await this.repo.find();
+    return users;
   }
 
   async update(id: number, attrs: Partial<User>) {

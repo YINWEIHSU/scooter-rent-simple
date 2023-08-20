@@ -36,7 +36,7 @@ describe('UsersService', () => {
     fakeRepository.create.mockReturnValue({ id: 1, email: 'test@example.com' });
     fakeRepository.save.mockResolvedValue(true);
 
-    const user = await service.create('test@example.com', 'password');
+    const user = await service.create('test@example.com', 'password', 'user');
     expect(user).toEqual({ id: 1, email: 'test@example.com' });
   });
 

@@ -12,7 +12,7 @@ export class RentalsController {
   async getRental(@Param('id') id: string){
     const rental = await this.rentalsService.findOneById(parseInt(id));
     return rental;
-  }
+  };
 
   @Post()
   async createRental(@Body() body: createRentalDto, @CurrentUser() user: User){
@@ -20,14 +20,12 @@ export class RentalsController {
     const rental = await this.rentalsService.create(scooterId, user);
 
     return rental;
-  }
+  };
 
   @Patch('/:id')
   async updateRental(@Param('id') id: string){
     const rental = await this.rentalsService.update(parseInt(id));
 
     return rental;
-    
-  }
-
-}
+  };
+};

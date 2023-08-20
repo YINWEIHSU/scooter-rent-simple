@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
   constructor(private usersService: UsersService) { }
 
-  async signup(email: string, password: string) {
+  async signup(email: string, password: string, role: string) {
     const users = await this.usersService.findOneByEmail(email);
 
     if (users) {
@@ -15,7 +15,7 @@ export class AuthService {
 
     const saltOrRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltOrRounds);
-    const user = await this.usersService.create(email, hashedPassword);
+    const user = await this.usersService.create(email, hashedPassword, role);
 
     return user;
   }

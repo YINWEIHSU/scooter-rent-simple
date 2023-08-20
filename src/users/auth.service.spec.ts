@@ -44,14 +44,21 @@ describe('AuthService', () => {
   });
 
   it('creates a new user with a hashed password', async () => {
-    const user = await service.signup('testuser01@example.com', '12345678');
+    const user = await service.signup(
+      'testuser01@example.com', '12345678',
+      'user'
+    );
     expect(user.password).not.toEqual('12345678');
   });
 
   it('throws an error if user signs up with email that is in use', async () => {
     fakeUsersService.findOneByEmail = () =>
       Promise.resolve({ id: 1, email: 'testuser02@example.com', password: '12345678' } as User);
-    await expect(service.signup('testuser02@example.com', '12345678')).rejects.toThrow(
+    await expect(service.signup(
+      'testuser02@example.com',
+       '12345678',
+        'user'
+       )).rejects.toThrow(
       BadRequestException,
     );
   });
@@ -63,7 +70,11 @@ describe('AuthService', () => {
   });
 
   it('throws an error if an invalid password is provided', async () => {
-    await service.signup('testuser04@example.com', '12345678')
+    await service.signup(
+      'testuser04@example.com',
+      '12345678',
+      'user'
+      )
     await expect(
       service.signin('testuser04@example.com', '87654321'),
     ).rejects.toThrow(BadRequestException);
