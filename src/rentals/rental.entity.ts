@@ -2,6 +2,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  CreateDateColumn,
   ManyToOne,
   JoinColumn
 } from 'typeorm';
@@ -21,7 +22,7 @@ export class Rental {
   @JoinColumn({ name: 'scooter_id' })
   scooter: Scooter;
 
-  @Column()
+  @CreateDateColumn()
   startTime: Date;
 
   @Column({ nullable: true })

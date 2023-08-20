@@ -17,12 +17,23 @@ export class UsersService {
     if (!id) {
       return null;
     }
-    const user = await this.repo.findOne({where:{id}});
+    const user = await this.repo.findOne({where:{ id }});
     return user;
   }
 
   async findOneByEmail(email: string) {
-    const user = await this.repo.findOne({where:{email}});
+    const user = await this.repo.findOne({where:{ email }});
+    return user;
+  }
+
+  async update(id: number, attrs: Partial<User>) {
+    const user = await this.findOneById(id);
+    if (!user) {
+      return null;
+    }
+    Object.assign(user, attrs);
+    await this.repo.save(user);
+    
     return user;
   }
 }
