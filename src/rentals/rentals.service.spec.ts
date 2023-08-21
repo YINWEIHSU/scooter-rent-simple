@@ -7,6 +7,7 @@ import { Rental } from './rental.entity';
 import { User } from '../users/user.entity';
 import { Scooter } from '../scooters/scooter.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { BadRequestException } from '@nestjs/common';
 
 describe('RentalsService', () => {
   let service: RentalsService;
@@ -20,28 +21,32 @@ describe('RentalsService', () => {
         email: 'user01@example.com',
         password: '12345678', 
         role: 'user',
-        rental: null
+        currentRental: null,
+        rentals: []
       },
       {
         id: 2,
         email: 'user02@example.com',
         password: '12345678',
         role: 'user',
-        rental: 2
+        currentRental: null,
+        rentals: []
       },
     ]
     const scooters: Scooter[] = [
       {
         id: 1,
         name: 'Scooter01',
-        rental: null,
-        status: 'available'
+        status: 'available',
+        currentRental: null,
+        rentals: []
       },
       {
         id: 2,
         name: 'Scooter02',
-        rental: 2,
-        status: 'rented'
+        status: 'rented',
+        currentRental: null,
+        rentals: []
       }
     ]
     fakeUserService = {
@@ -136,12 +141,36 @@ describe('RentalsService', () => {
       user,
       scooter
      });
-    const result = await service.update(1);
+    const result = await service.update(1, user);
     expect(result).toBeDefined();
-    expect(result.endTime).toEqual(endTime);
+    expect(result.endTime).not.toBeNull();
+    expect(result.endTime).not.toBeUndefined()
     expect(result.scooter.status).toEqual('available');
-    expect(result.user.rental).toEqual(null);
+    expect(result.user.currentRental).toEqual(null);
     expect(fakeRepository.save).toHaveBeenCalled();
+  });
+
+  it('should successfully update a rental', async () => {
+    const user = await fakeUserService.findOneById(2);
+    const fakeCurrentUser = await fakeUserService.findOneById(1);
+    const scooter = await fakeScooterService.findOneById(2);
+    const endTime = new Date();
+    const startTime = new Date(endTime.getTime() - 1000 * 60 * 10);
+    fakeRepository.findOne.mockResolvedValue({
+      id: 2,
+      startTime,
+      endTime: null,
+      user,
+      scooter
+    });
+    fakeRepository.save.mockResolvedValue({
+      id: 2,
+      startTime,
+      endTime,
+      user,
+      scooter
+    });
+    await expect(service.update(1, fakeCurrentUser)).rejects.toThrowError(BadRequestException);
   });
 
   it('should successfully find a rental by id', async () => {

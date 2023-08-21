@@ -14,11 +14,11 @@ export class Rental {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, user => user.rental)
+  @ManyToOne(() => User, user => user.rentals)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Scooter, scooter => scooter.rental)
+  @ManyToOne(() => Scooter, scooter => scooter.rentals)
   @JoinColumn({ name: 'scooter_id' })
   scooter: Scooter;
 

@@ -15,7 +15,7 @@ export class RentalsService {
      ) {}
 
   async create(scooterId: number, user: User) {
-    if (user.rental) {
+    if (user.currentRental) {
       throw new BadRequestException('User already has a rental');
     }
 
@@ -25,7 +25,7 @@ export class RentalsService {
       throw new NotFoundException('Scooter not found');
     }
 
-    if (scooter.rental) {
+    if (scooter.currentRental) {
       throw new BadRequestException('Scooter is already rented');
     }
 
@@ -33,22 +33,26 @@ export class RentalsService {
     rental.scooter = scooter;
     rental.user = user;
     await this.repo.save(rental);
-    await this.scooterService.update(scooter.id, { rental: rental.id, status: 'rented' });
-    await this.userService.update(user.id, { rental: rental.id });
+    await this.scooterService.update(scooter.id, { currentRental: rental.id, status: 'rented' });
+    await this.userService.update(user.id, { currentRental: rental.id });
 
     return rental;
   }
 
   async findOneById(id: number) {
-    const rental = await this.repo.findOne({ where: { id } });
+    const rental = await this.repo.findOne({ where: { id }, relations: ['scooter', 'user'] });
     return rental;
   }
 
-  async update(id: number) {
+  async update(id: number, user: User) {
     const rental = await this.findOneById(id);
 
     if (!rental) {
       throw new NotFoundException('Rental not found');
+    }
+
+    if (rental.user.id !== user.id) {
+      throw new BadRequestException('User is not the owner of this rental');
     }
 
     if (rental.endTime) {
@@ -56,10 +60,9 @@ export class RentalsService {
     }
 
     rental.endTime = new Date();
-
     await this.repo.save(rental);
-    await this.scooterService.update(rental.scooter.id, { rental: null, status: 'available' });
-    await this.userService.update(rental.user.id, { rental: null });
+    await this.scooterService.update(rental.scooter.id, { currentRental: null, status: 'available' });
+    await this.userService.update(rental.user.id, { currentRental: null });
 
     return rental;
   }

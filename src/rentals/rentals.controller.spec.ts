@@ -46,8 +46,9 @@ describe('RentalsController', () => {
   });
 
   it('should update a rental by ID', async () => {
+    const mockUser = {} as User;
     fakeRentalsService.update.mockResolvedValue({ id: 1, endTime: new Date() });
-    const result = await controller.updateRental('1');
+    const result = await controller.updateRental('1', mockUser);
     expect(result).toHaveProperty('endTime');
   });
 });

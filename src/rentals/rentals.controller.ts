@@ -23,8 +23,8 @@ export class RentalsController {
   };
 
   @Patch('/:id')
-  async updateRental(@Param('id') id: string){
-    const rental = await this.rentalsService.update(parseInt(id));
+  async updateRental(@Param('id') id: string, @CurrentUser() user: User){
+    const rental = await this.rentalsService.update(parseInt(id), user);
 
     return rental;
   };

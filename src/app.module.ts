@@ -1,9 +1,11 @@
-import { Module, ValidationPipe } from '@nestjs/common';
+import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CurrentUserMiddleware } from './users/middlewares/current-user.middleware';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
 import { ScootersModule } from './scooters/scooters.module';
 import { RentalsModule } from './rentals/rentals.module';
@@ -25,6 +27,7 @@ import { Rental } from './rentals/rental.entity';
       // TODO: Remove synchronize in production
       synchronize: true
     }),
+    TypeOrmModule.forFeature([User]),
     UsersModule, 
     ScootersModule, 
     RentalsModule, 
@@ -33,6 +36,7 @@ import { Rental } from './rentals/rental.entity';
   controllers: [AppController],
   providers: [
     AppService,
+    UsersService,
     {
       provide: APP_PIPE,
       useValue: new ValidationPipe({
@@ -41,4 +45,10 @@ import { Rental } from './rentals/rental.entity';
     }
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(CurrentUserMiddleware)
+      .forRoutes('*');
+  }
+}

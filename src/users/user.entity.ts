@@ -15,6 +15,9 @@ export class User {
   @Column({default: 'user'})
   role: string;
 
+  @Column({default: null})
+  currentRental: number;
+
   @OneToMany(() => Rental, rental => rental.user)
-  rental: number;
+  rentals: Rental[];
 }

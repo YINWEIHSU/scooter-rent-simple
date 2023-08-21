@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, OneToMany } from 'typeorm';
 import { Rental } from '../rentals/rental.entity';
 
 @Entity()
@@ -12,6 +12,9 @@ export class Scooter {
   @Column({ default: 'available' })
   status: string;
 
+  @Column({ default: null })
+  currentRental: number;
+
   @OneToMany(() => Rental, rental => rental.scooter)
-  rental: number;
+  rentals: Rental[];
 }

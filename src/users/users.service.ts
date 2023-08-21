@@ -18,17 +18,17 @@ export class UsersService {
     if (!id) {
       return null;
     }
-    const user = await this.repo.findOne({where:{ id }});
+    const user = await this.repo.findOne({where:{ id }, relations: ['rentals']});
     return user;
   }
 
   async findOneByEmail(email: string) {
-    const user = await this.repo.findOne({where:{ email }});
+    const user = await this.repo.findOne({ where: { email }, relations: ['rentals'] });
     return user;
   }
 
   async findAll() {
-    const users = await this.repo.find();
+    const users = await this.repo.find({ relations: ['rentals'] });
     return users;
   }
 

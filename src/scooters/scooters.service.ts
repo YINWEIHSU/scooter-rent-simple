@@ -30,7 +30,7 @@ export class ScootersService {
   }
 
   async findAll() {
-    const scooters = await this.repo.find();
+    const scooters = await this.repo.find({ relations: ['rentals'] });
     return scooters;
   }
 
@@ -38,7 +38,7 @@ export class ScootersService {
     if (!id) {
       return null;
     }
-    const scooter = await this.repo.findOne({ where:{ id }});
+    const scooter = await this.repo.findOne({ where:{ id }, relations: ['rentals']});
     return scooter;
   }
 }
