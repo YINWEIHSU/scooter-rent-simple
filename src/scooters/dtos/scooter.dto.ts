@@ -1,12 +1,12 @@
-import { Expose } from "class-transformer";
+import { Expose } from 'class-transformer'
 
 export class ScooterDto {
   @Expose()
-  id: number;
+  id: number
 
   @Expose()
-  name: string;
+  name: string
 
   @Expose()
-  status: string;
+  status: string
 }

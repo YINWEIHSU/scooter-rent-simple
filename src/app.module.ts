@@ -1,19 +1,19 @@
-import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { APP_PIPE } from '@nestjs/core';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { CurrentUserMiddleware } from './users/middlewares/current-user.middleware';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersService } from './users/users.service';
-import { UsersModule } from './users/users.module';
-import { ScootersModule } from './scooters/scooters.module';
-import { RentalsModule } from './rentals/rentals.module';
-import { AdminsModule } from './admins/admins.module';
-import { User } from './users/user.entity';
-import { Scooter } from './scooters/scooter.entity';
-import { Rental } from './rentals/rental.entity';
-import * as session from 'express-session';
+import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { APP_PIPE } from '@nestjs/core'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { CurrentUserMiddleware } from './users/middlewares/current-user.middleware'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { UsersService } from './users/users.service'
+import { UsersModule } from './users/users.module'
+import { ScootersModule } from './scooters/scooters.module'
+import { RentalsModule } from './rentals/rentals.module'
+import { AdminsModule } from './admins/admins.module'
+import { User } from './users/user.entity'
+import { Scooter } from './scooters/scooter.entity'
+import { Rental } from './rentals/rental.entity'
+import * as session from 'express-session'
 
 @Module({
   imports: [
@@ -50,7 +50,7 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(CurrentUserMiddleware)
-      .forRoutes('*');
+      .forRoutes('*')
 
     consumer
       .apply(
@@ -63,6 +63,6 @@ export class AppModule {
           }
         })
       )
-      .forRoutes('*');
-  };
-};
+      .forRoutes('*')
+  }
+}

@@ -5,26 +5,26 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn
-} from 'typeorm';
+} from 'typeorm'
 import { User } from '../users/user.entity'
-import { Scooter } from '../scooters/scooter.entity';
+import { Scooter } from '../scooters/scooter.entity'
 
 @Entity()
 export class Rental {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @ManyToOne(() => User, user => user.rentals)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user: User
 
   @ManyToOne(() => Scooter, scooter => scooter.rentals)
   @JoinColumn({ name: 'scooter_id' })
-  scooter: Scooter;
+  scooter: Scooter
 
   @CreateDateColumn()
-  startTime: Date;
+  startTime: Date
 
   @Column({ nullable: true })
-  endTime?: Date | null;
+  endTime?: Date | null
 }

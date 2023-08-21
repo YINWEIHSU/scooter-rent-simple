@@ -1,23 +1,23 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Rental } from '../rentals/rental.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
+import { Rental } from '../rentals/rental.entity'
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column({ length: 256 })
-  email: string;
+  email: string
 
   @Column({ length: 32 })
-  password: string;
+  password: string
 
   @Column({default: 'user'})
-  role: string;
+  role: string
 
   @Column({default: null})
-  currentRental: number;
+  currentRental: number
 
   @OneToMany(() => Rental, rental => rental.user)
-  rentals: Rental[];
+  rentals: Rental[]
 }

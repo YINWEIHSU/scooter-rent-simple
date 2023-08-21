@@ -1,8 +1,8 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
-import { ScootersService } from './scooters.service';
-import { AuthGuard } from '../guard/auth.guard';
-import { Serialize } from '../interceptors/serialize.interceptor';
-import { ScooterDto } from './dtos/scooter.dto';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common'
+import { ScootersService } from './scooters.service'
+import { AuthGuard } from '../guard/auth.guard'
+import { Serialize } from '../interceptors/serialize.interceptor'
+import { ScooterDto } from './dtos/scooter.dto'
 
 @Serialize(ScooterDto)
 @Controller('scooters')
@@ -12,13 +12,13 @@ export class ScootersController {
 
   @Get()
   async findAll() {
-    const scooters = await this.scootersService.findAll();
-    return scooters;
+    const scooters = await this.scootersService.findAll()
+    return scooters
   }
 
   @Get('/:id')
   async findOne(@Param('id') id: string) {
-    const scooter = await this.scootersService.findOneById(parseInt(id));
-    return scooter;
+    const scooter = await this.scootersService.findOneById(parseInt(id))
+    return scooter
   }
 }
