@@ -39,20 +39,21 @@ export class RentalsService {
     return rental;
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: number, user: User) {
     const rental = await this.repo.findOne({ where: { id }, relations: ['scooter', 'user'] });
+
+    if (rental.user.id !== user.id) {
+      throw new BadRequestException('User is not the owner of this rental');
+    }
+
     return rental;
   }
 
   async update(id: number, user: User) {
-    const rental = await this.findOneById(id);
+    const rental = await this.findOneById(id, user);
 
     if (!rental) {
       throw new NotFoundException('Rental not found');
-    }
-
-    if (rental.user.id !== user.id) {
-      throw new BadRequestException('User is not the owner of this rental');
     }
 
     if (rental.endTime) {

@@ -11,8 +11,8 @@ export class RentalsController {
   constructor(private rentalsService: RentalsService) {}
 
   @Get('/:id')
-  async getRental(@Param('id') id: string){
-    const rental = await this.rentalsService.findOneById(parseInt(id));
+  async getRental(@Param('id') id: string, @CurrentUser() user: User){
+    const rental = await this.rentalsService.findOneById(parseInt(id), user);
     return rental;
   };
 

@@ -30,8 +30,9 @@ describe('RentalsController', () => {
   });
 
   it('should get a rental by id', async () => {
+    const mockUser = {} as User;
     fakeRentalsService.findOneById.mockResolvedValue({ id: 1, scooter: {} });
-    const result = await controller.getRental('1');
+    const result = await controller.getRental('1', mockUser);
     expect(result).toEqual({ id: 1, scooter: {} });
   });
 

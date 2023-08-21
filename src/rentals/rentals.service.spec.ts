@@ -185,7 +185,7 @@ describe('RentalsService', () => {
       user,
       scooter
      });
-    const result = await service.findOneById(2);
+    const result = await service.findOneById(2, user);
     expect(result).toBeDefined();
     expect(fakeRepository.findOne).toHaveBeenCalled();
   })
