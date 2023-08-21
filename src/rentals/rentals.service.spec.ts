@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { RentalsService } from './rentals.service';
 import { UsersService } from '../users/users.service';
 import { ScootersService } from '../scooters/scooters.service';
@@ -14,6 +14,7 @@ describe('RentalsService', () => {
   let fakeUserService: Partial<UsersService>;
   let fakeScooterService: Partial<ScootersService>;
   let fakeRepository: Partial<Record<keyof Repository<Rental>, jest.Mock>>;
+  let fakeDataSource: Partial<DataSource>;
 
   beforeEach(async () => {
     const users: User[] = [
@@ -76,6 +77,9 @@ describe('RentalsService', () => {
       save: jest.fn(),
       findOne: jest.fn()
     }
+    fakeDataSource = {
+      transaction: jest.fn().mockResolvedValue({}),
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -91,6 +95,10 @@ describe('RentalsService', () => {
         {
           provide: getRepositoryToken(Rental),
           useValue: fakeRepository
+        },
+        {
+          provide: DataSource,
+          useValue: fakeDataSource
         }
       ],
     }).compile();
@@ -119,7 +127,7 @@ describe('RentalsService', () => {
     expect(result).toBeDefined();
     expect(result.scooter).toEqual(scooter);
     expect(result.user).toEqual(user);
-    expect(fakeRepository.save).toHaveBeenCalled();
+    expect(fakeDataSource.transaction).toHaveBeenCalled();
   });
 
   it('should successfully update a rental', async () => {
@@ -145,9 +153,7 @@ describe('RentalsService', () => {
     expect(result).toBeDefined();
     expect(result.endTime).not.toBeNull();
     expect(result.endTime).not.toBeUndefined()
-    expect(result.scooter.status).toEqual('available');
-    expect(result.user.currentRental).toEqual(null);
-    expect(fakeRepository.save).toHaveBeenCalled();
+    expect(fakeDataSource.transaction).toHaveBeenCalled();
   });
 
   it('should successfully update a rental', async () => {

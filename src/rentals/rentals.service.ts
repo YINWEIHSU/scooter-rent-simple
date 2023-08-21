@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { Rental } from './rental.entity';
+import { User } from '../users/user.entity';
+import { Scooter } from '../scooters/scooter.entity';
 import { ScootersService } from '../scooters/scooters.service';
 import { UsersService } from '../users/users.service';
-import { User } from '../users/user.entity';
 
 @Injectable()
 export class RentalsService {
@@ -12,6 +13,7 @@ export class RentalsService {
     @InjectRepository(Rental) private repo: Repository<Rental>,
     private scooterService: ScootersService,
     private userService: UsersService,
+    private dataSource: DataSource
      ) {}
 
   async create(scooterId: number, user: User) {
@@ -32,10 +34,11 @@ export class RentalsService {
     const rental = this.repo.create();
     rental.scooter = scooter;
     rental.user = user;
-    await this.repo.save(rental);
-    await this.scooterService.update(scooter.id, { currentRental: rental.id, status: 'rented' });
-    await this.userService.update(user.id, { currentRental: rental.id });
-
+    await this.dataSource.transaction(async manager => {
+      await manager.save(Rental, rental);
+      await manager.update(Scooter, scooter.id, { currentRental: rental.id, status: 'rented' });
+      await manager.update(User, user.id, { currentRental: rental.id });
+    });
     return rental;
   }
 
@@ -61,10 +64,11 @@ export class RentalsService {
     }
 
     rental.endTime = new Date();
-    await this.repo.save(rental);
-    await this.scooterService.update(rental.scooter.id, { currentRental: null, status: 'available' });
-    await this.userService.update(rental.user.id, { currentRental: null });
-
+    await this.dataSource.transaction(async manager => {
+      await manager.save(Rental, rental);
+      await manager.update(Scooter, rental.scooter.id, { currentRental: null, status: 'available' });
+      await manager.update(User, rental.user.id, { currentRental: null });
+    });
     return rental;
   }
 }
