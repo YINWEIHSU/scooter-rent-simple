@@ -4,7 +4,10 @@ import { CurrentUser } from '../users/decorators/current-user.decorator';
 import { User } from '../users/user.entity';
 import { createRentalDto } from './dtos/create-rental.dto';
 import { AuthGuard } from '../guard/auth.guard';
+import { Serialize } from '../interceptors/serialize.interceptor';
+import { RentalDto } from './dtos/rental.dto';
 
+@Serialize(RentalDto)
 @Controller('rentals')
 @UseGuards(AuthGuard)
 export class RentalsController {

@@ -3,7 +3,10 @@ import { createUserDto } from './dtos/create-user.dto';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
 import { AuthGuard } from '../guard/auth.guard';
+import { Serialize } from '../interceptors/serialize.interceptor';
+import { UserDto } from './dtos/user.dto';
 
+@Serialize(UserDto)
 @Controller('users')
 export class UsersController {
   constructor(

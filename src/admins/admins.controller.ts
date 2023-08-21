@@ -4,6 +4,9 @@ import { UpdateScooterDto } from '../scooters/dtos/update-scooter.dto';
 import { ScootersService } from '../scooters/scooters.service';
 import { UsersService } from '../users/users.service';
 import { AdminGuard } from '../guard/admin.guard';
+import { Serialize } from '../interceptors/serialize.interceptor';
+import { ScooterDto } from '../scooters/dtos/scooter.dto';
+import { UserDto } from '../users/dtos/user.dto';
 
 @UseGuards(AdminGuard)
 @Controller('admins')
@@ -13,6 +16,7 @@ export class AdminsController {
     private usersService: UsersService
     ) {}
 
+  @Serialize(ScooterDto)
   @Post('/scooter')
   async createScooter(@Body() body: CreateScooterDto) {
     const { name } = body;
@@ -22,6 +26,7 @@ export class AdminsController {
     return scooter;
   }
 
+  @Serialize(ScooterDto)
   @Patch('/scooter/:id')
   async updateScooter(
     @Param('id') id: string,
@@ -30,6 +35,7 @@ export class AdminsController {
     return await this.scootersService.update(parseInt(id), body);
   }
 
+  @Serialize(UserDto)
   @Get('/users')
   async findAllUsers() {
     const users = await this.usersService.findAll();

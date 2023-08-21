@@ -1,7 +1,10 @@
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ScootersService } from './scooters.service';
 import { AuthGuard } from '../guard/auth.guard';
+import { Serialize } from '../interceptors/serialize.interceptor';
+import { ScooterDto } from './dtos/scooter.dto';
 
+@Serialize(ScooterDto)
 @Controller('scooters')
 @UseGuards(AuthGuard)
 export class ScootersController {
