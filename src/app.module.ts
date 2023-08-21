@@ -13,6 +13,7 @@ import { AdminsModule } from './admins/admins.module';
 import { User } from './users/user.entity';
 import { Scooter } from './scooters/scooter.entity';
 import { Rental } from './rentals/rental.entity';
+import * as session from 'express-session';
 
 @Module({
   imports: [
@@ -50,5 +51,18 @@ export class AppModule {
     consumer
       .apply(CurrentUserMiddleware)
       .forRoutes('*');
-  }
-}
+
+    consumer
+      .apply(
+        session({
+          secret: process.env.SESSION_SECRET,
+          resave: false,
+          saveUninitialized: false,
+          cookie: {
+            maxAge: 1000 * 60 * 60 * 8
+          }
+        })
+      )
+      .forRoutes('*');
+  };
+};

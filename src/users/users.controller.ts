@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, Session, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Patch, Post, Session, UseGuards } from '@nestjs/common';
 import { createUserDto } from './dtos/create-user.dto';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
@@ -19,6 +19,7 @@ export class UsersController {
   }
 
   @Post('/signin')
+  @HttpCode(200)
   async signin(@Body() body: createUserDto, @Session() session: any) {
     const user = await this.authService.signin(body.email, body.password);
     session.userId = user.id;
@@ -26,6 +27,7 @@ export class UsersController {
   }
 
   @Post('/signout')
+  @HttpCode(200)
   signout(@Session() session: any) {
     session.userId = null;
   }
