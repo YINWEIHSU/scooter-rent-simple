@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RentalsController } from './rentals.controller';
 import { RentalsService } from './rentals.service';
-import { UsersService } from 'src/users/users.service';
-import { ScootersService } from 'src/scooters/scooters.service';
+import { UsersService } from '../users/users.service';
+import { ScootersService } from '../scooters/scooters.service';
 import { Rental } from './rental.entity';
-import { User } from 'src/users/user.entity';
-import { Scooter } from 'src/scooters/scooter.entity';
+import { User } from '../users/user.entity';
+import { Scooter } from '../scooters/scooter.entity';
 
 @Module({
   imports: [
